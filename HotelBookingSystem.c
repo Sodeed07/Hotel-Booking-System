@@ -47,16 +47,24 @@ void bookRoom() {
 
     printf("\nEnter the room number you'd like to book: ");
     scanf("%d", &roomNumber);
+    getchar(); // Consume the newline character
 
-    
-    if (roomNumber < 1 || roomNumber > MAX_ROOMS || !hotel[roomNumber - 1].isAvailable) {
-        printf("Invalid room number or the room is already booked.\n");
+    // Check if the room number is valid
+    if (roomNumber < 1 || roomNumber > MAX_ROOMS) {
+        printf("Invalid room number.\n");
+        return;
+    }
+
+    // Check if the room is available
+    if (!hotel[roomNumber - 1].isAvailable) {
+        printf("Room %d is already booked.\n", roomNumber);
         return;
     }
 
     char guestName[MAX_NAME_LENGTH];
     printf("Enter the guest name: ");
-    scanf("%s", guestName);
+    fgets(guestName, MAX_NAME_LENGTH, stdin);
+    guestName[strcspn(guestName, "\n")] = 0; // Remove the newline character
 
     hotel[roomNumber - 1].isAvailable = 0;
     strcpy(hotel[roomNumber - 1].guestName, guestName);
@@ -70,14 +78,20 @@ void checkOutRoom() {
 
     printf("\nEnter the room number to check out: ");
     scanf("%d", &roomNumber);
+    getchar(); // Consume the newline character
 
-    
-    if (roomNumber < 1 || roomNumber > MAX_ROOMS || !hotel[roomNumber - 1].isAvailable) {
-        printf("Invalid room number or the room is already vacant.\n");
+    // Check if the room number is valid
+    if (roomNumber < 1 || roomNumber > MAX_ROOMS) {
+        printf("Invalid room number.\n");
         return;
     }
 
-    
+    // Check if the room is occupied
+    if (hotel[roomNumber - 1].isAvailable) {
+        printf("Room %d is already vacant.\n", roomNumber);
+        return;
+    }
+
     hotel[roomNumber - 1].isAvailable = 1;
     strcpy(hotel[roomNumber - 1].guestName, "");
 
@@ -110,6 +124,7 @@ void showMenu() {
         printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
+        getchar(); // Consume the newline character
 
         switch (choice) {
             case 1:
